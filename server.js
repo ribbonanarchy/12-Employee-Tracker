@@ -154,7 +154,7 @@ function startPrompt() {
                 });
                 break;
             case 'Update an Employee Role':
-                
+                console.log('This functionality will be implemented in the future.');
                 break;
             default:
                 console.log('Thanks for using our application! Ctrl+c to stop.');
