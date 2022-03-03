@@ -29,7 +29,8 @@ function startPrompt() {
             type: 'list', 
             name: 'choice',
             message: 'Which action would you like to take?', 
-            choices: ['View All Departments', 'View All Roles', 'View All Employees', 'Add a Department', 'Add a Role', 'Add an Employee', 'Update an Employee Role', 'Exit the Application']
+            choices: ['View All Departments', 'View All Roles', 'View All Employees', 'Add a Department', 'Add a Role', 'Add an Employee', 'Update an Employee Role', 'Exit the Application'],
+            loop: false
         }
     ]).then((userAnswers) => {
         switch(userAnswers.choice) {
@@ -44,10 +45,24 @@ function startPrompt() {
                 });
                 break;
             case 'View All Roles': 
-                
+                db.query('SELECT * FROM role', (err, rows) => {
+                    if(err) { 
+                        res.status(500).json( {error: err.message} );
+                        return;
+                    }
+                    console.table(rows);
+                    startPrompt();
+                });
                 break;
             case 'View All Employees': 
-                
+                db.query('SELECT * FROM employee', (err, rows) => {
+                    if(err) { 
+                        res.status(500).json( {error: err.message} );
+                        return;
+                    }
+                    console.table(rows);
+                    startPrompt();
+                });
                 break;
             case 'Add a Department': 
                 
