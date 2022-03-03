@@ -117,7 +117,41 @@ function startPrompt() {
                 });
                 break;
             case 'Add an Employee':
-                
+                inquirer.prompt([
+                    {
+                        type: 'input', 
+                        name: 'newFirst',
+                        message: "What is the first name of the employee?"
+                    }, 
+                    {
+                        type: 'input', 
+                        name: 'newLast', 
+                        message: 'What is the last name of the employee?'
+                    }, 
+                    {
+                        type: 'input', 
+                        name: 'newRoleId', 
+                        message: 'Which role does this employee have? (Enter ID)'
+                    }, 
+                    {
+                        type: 'input', 
+                        name: 'newManager', 
+                        message: "What is the employee ID of this employee's manager?"
+                    }
+                ]).then(employee => {
+                    db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${employee.newFirst}', '${employee.newLast}', '${employee.newRoleId}', '${employee.newManager}')`, (err, result) => {
+                        if (err) throw err;
+                        console.log(`Employee ${employee.newFirst} ${employee.newLast} added.`);
+                    });
+                    db.query('SELECT * FROM employee', (err, rows) => {
+                        if(err) { 
+                            res.status(500).json( {error: err.message} );
+                            return;
+                        }
+                        console.table(rows); 
+                        startPrompt();
+                    });
+                });
                 break;
             case 'Update an Employee Role':
                 
