@@ -65,10 +65,56 @@ function startPrompt() {
                 });
                 break;
             case 'Add a Department': 
-                
+                inquirer.prompt([{
+                    type: 'input', 
+                    name: 'newDepartment',
+                    message: "What is the name of the department you'd like to add?"
+                }]).then(department => {
+                    db.query(`INSERT INTO department (name) VALUES ('${department.newDepartment}')`, (err, result) => {
+                        if (err) throw err;
+                        console.log(`Department of ${department.newDepartment} added.`);
+                    });
+                    db.query('SELECT * FROM department', (err, rows) => {
+                        if(err) { 
+                            res.status(500).json( {error: err.message} );
+                            return;
+                        }
+                        console.table(rows); 
+                        startPrompt();
+                    });
+                });
                 break;
             case 'Add a Role':
-                
+                inquirer.prompt([
+                    {
+                        type: 'input', 
+                        name: 'newTitle',
+                        message: "What is the name of the role you'd like to add?"
+                    }, 
+                    {
+                        type: 'input', 
+                        name: 'newSalary', 
+                        message: 'What is the salary for this role?'
+                    }, 
+                    {
+                        type: 'input', 
+                        name: 'newRoleDept', 
+                        message: 'To what department does this role belong?'
+                    }
+                ]).then(role => {
+                    db.query(`INSERT INTO role (title, salary, department_id) VALUES ('${role.newTitle}', '${role.newSalary}', '${role.newRoleDept}')`, (err, result) => {
+                        if (err) throw err;
+                        console.log(`Role of ${role.newTitle} added.`);
+                    });
+                    db.query('SELECT * FROM role', (err, rows) => {
+                        if(err) { 
+                            res.status(500).json( {error: err.message} );
+                            return;
+                        }
+                        console.table(rows); 
+                        startPrompt();
+                    });
+                });
                 break;
             case 'Add an Employee':
                 
