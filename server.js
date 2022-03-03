@@ -1,4 +1,5 @@
 const express = require('express');
+const res = require('express/lib/response');
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 
@@ -28,30 +29,40 @@ function startPrompt() {
             type: 'list', 
             name: 'choice',
             message: 'Which action would you like to take?', 
-            choices: ['View All Departments', 'View All Roles', 'View All Employees', 'Add a Department', 'Add a Role', 'Add an Employee', 'Update an Employee Role']
+            choices: ['View All Departments', 'View All Roles', 'View All Employees', 'Add a Department', 'Add a Role', 'Add an Employee', 'Update an Employee Role', 'Exit the Application']
         }
     ]).then((userAnswers) => {
         switch(userAnswers.choice) {
             case 'View All Departments': 
-                console.log(userAnswers.choice);
+                db.query('SELECT * FROM department', (err, rows) => {
+                    if(err) { 
+                        res.status(500).json( {error: err.message} );
+                        return;
+                    }
+                    console.table(rows);
+                    startPrompt();
+                });
                 break;
             case 'View All Roles': 
-                console.log(userAnswers.choice);
+                
                 break;
             case 'View All Employees': 
-                console.log(userAnswers.choice);
+                
                 break;
             case 'Add a Department': 
-                console.log(userAnswers.choice);
+                
                 break;
             case 'Add a Role':
-                console.log(userAnswers.choice);
+                
                 break;
             case 'Add an Employee':
-                console.log(userAnswers.choice);
+                
                 break;
             case 'Update an Employee Role':
-                console.log(userAnswers.choice);
+                
+                break;
+            default:
+                console.log('Thanks for using our application! Ctrl+c to stop.');
                 break;
         }
     })
